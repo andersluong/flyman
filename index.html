@@ -11,7 +11,7 @@
     <script>
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/FM.json", {onProgress: UnityProgress});
 	var showLogIn = document.getElementById("ShowLogIn");
-    showLogIn.style.display = 'none';
+    showLogIn.style.visibility = 'hidden';
     //Load the SDK
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -27,7 +27,7 @@
           if (response.status == 'connected') {
 	    		   OnLogin(response);
           } else {
-            showLogIn.style.display = 'block';
+            showLogIn.style.visibility = 'visible';
           }
 	    	});
 	    }
