@@ -107,6 +107,8 @@ p.customfont {
     </style>
   </head>
   <body>
+	  <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0&appId=1733001530153620&autoLogAppEvents=1"></script>
   	<div>
 		<form onsubmit="FixInputOnSubmit()" autocomplete="off" style="width: 0px; height: 0px; position: absolute; top: -9999px;">
 			<input type="text" id="fixInput" oninput="gameInstance.Module.ccall('FixInputUpdate', null)" onblur="gameInstance.Module.ccall('FixInputOnBlur', null)" style="font-size: 42px;">
@@ -126,6 +128,7 @@ p.customfont {
 	<div class="webgl-content">
       <div id="gameContainer" style="width: 600px; height: 450px">
       </div>
+		<div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false"></div>
       <div class="footer">
       	<div class="slideshow-container">
 
