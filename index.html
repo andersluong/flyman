@@ -10,7 +10,6 @@
     <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
     <script>
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/FM.json", {onProgress: UnityProgress});
-    document.getElementById("ShowLogIn").style.display='none';
     //Load the SDK
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -44,6 +43,7 @@
         	gameInstance.SendMessage("MainCodes", "LoadedFB", response.authResponse.accessToken + "|" + data.name);
       });
     }
+	    document.getElementById("ShowLogIn").style.display='none';
     </script>
     <style>
     	@font-face {
