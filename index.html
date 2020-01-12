@@ -43,7 +43,6 @@
         	gameInstance.SendMessage("MainCodes", "LoadedFB", response.authResponse.accessToken + "|" + data.name);
       });
     }
-	    document.getElementById("ShowLogIn").style.display='none';
     </script>
     <style>
     	@font-face {
@@ -168,5 +167,6 @@ p.customfont {
         <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>!-->
       </div>
     </div>
+	<script>document.getElementById("ShowLogIn").style.display='none';</script>
   </body>
 </html>
