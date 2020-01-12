@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
+    <script>
+    var gameInstance = UnityLoader.instantiate("gameContainer", "Build/FM.json", {onProgress: UnityProgress});
+    //Load the SDK
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function StartConnecting(){
+	    FB.init({appId: '1733001530153620', status: true, cookie: false, xbml: true});
+        FB.getLoginStatus(function(response) {
+          if (response.status == 'connected') {
+	    		   OnLogin(response);
+          } else {
+            //lets wait a few seconds and try
+            FB.login(function(response) {
+              OnLogin(response);
+            }, {scope: 'public_profile,user_friends,email'});
+          }
+	    	});
+	    }
+
+      function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+         onLogin(response);
+       });
+      }
+
+
+    function OnLogin(response) {
+    	FB.api('/me/','GET',{"fields":"name"},function(data) {
+          console.log(response.authResponse.accessToken);
+        	gameInstance.SendMessage("MainCodes", "LoadedFB", response.authResponse.accessToken + "|" + data.name);
+      });
+    }
+    </script>
+    <style>
+    	@font-face {
+    font-family: "Vegur";
+    src: url(Vegur.otf) format("truetype");
+}
+p.customfont { 
+    font-family: "Vegur", Verdana, Tahoma;
+}
+   	    * {box-sizing:border-box}
+  body {font-family: Verdana,sans-serif;}
+  .mySlides {display:none}
+
+
+  /* Slideshow container */
+  .slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+  }
+
+  /* The dots/bullets/indicators */
+  .dot {
+    height: 0px;
+    width: 0px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+  }
+
+  .active {
+    background-color: #717171;
+  }
+
+  /* Fading animation */
+  .fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  @-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 300px) {
+    .text {font-size: 11px}
+  }
+    </style>
+  </head>
+  <body>
+  	<div>
+		<form onsubmit="FixInputOnSubmit()" autocomplete="off" style="width: 0px; height: 0px; position: absolute; top: -9999px;">
+			<input type="text" id="fixInput" oninput="gameInstance.Module.ccall('FixInputUpdate', null)" onblur="gameInstance.Module.ccall('FixInputOnBlur', null)" style="font-size: 42px;">
+		</form>
+	</div>
+    <script>
+		function FixInputOnSubmit() {
+			document.getElementById("fixInput").blur();
+			event.preventDefault();
+		}
+	</script>
+    <div>
+		<form onsubmit="FixInputOnSubmit()" autocomplete="off" style="width: 0px; height: 0px; position: absolute; top: -9999px;">
+			<input type="text" id="fixInput" oninput="gameInstance.Module.ccall('FixInputUpdate', null)" onblur="gameInstance.Module.ccall('FixInputOnBlur', null)" style="font-size: 42px;">
+		</form>
+	</div>
+	<div class="webgl-content">
+      <div id="gameContainer" style="width: 600px; height: 450px">
+      </div>
+      <div class="footer">
+      	<div class="slideshow-container">
+
+           <div class="mySlides fade">
+             <div class="numbertext"></div>
+             <a href="https://www.facebook.com/groups/flymangame/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height = "100" weight = "600"></a>
+             <div class="text"></div>
+           </div>
+
+           <div class="mySlides fade">
+             <div class="numbertext"></div>
+             <a href="https://www.facebook.com/groups/flymanpage/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height = "100" weight = "600"></a>
+             <div class="text"></div>
+           </div>
+
+           <div class="mySlides fade">
+             <div class="numbertext"></div>
+             <a href="https://www.facebook.com/groups/flymangame/permalink/2188118384619616/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height = "100" weight = "600"></a>
+             <div class="text"></div>
+           </div>
+
+         </div>
+
+         <div style="text-align:left">
+           <span class="dot"></span> 
+           <span class="dot"></span> 
+           <span class="dot"></span>
+         </div>
+
+         <script>
+           var slideIndex = 0;
+           showSlides();
+
+           function showSlides() {
+             var i;
+             var slides = document.getElementsByClassName("mySlides");
+             var dots = document.getElementsByClassName("dot");
+             for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+             for (i = 0; i < dots.length; i++) {
+               dots[i].className = dots[i].className.replace(" active", "");
+             }
+             slides[slideIndex-1].style.display = "block";  
+             dots[slideIndex-1].className += " active";
+          setTimeout(showSlides, 15000); // Change image every 15 seconds
+       }
+     </script>
+ </div>
+        <!--<div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>!-->
+      </div>
+    </div>
+  </body>
+</html>
