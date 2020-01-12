@@ -10,6 +10,8 @@
     <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
     <script>
     var gameInstance = UnityLoader.instantiate("gameContainer", "Build/FM.json", {onProgress: UnityProgress});
+	var showLogIn = document.getElementById("ShowLogIn");
+    showLogIn.style.display = 'none';
     //Load the SDK
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -25,9 +27,7 @@
           if (response.status == 'connected') {
 	    		   OnLogin(response);
           } else {
-            //lets wait a few seconds and try
-            var showLogIn = document.getElementById("ShowLogIn");
-
+            showLogIn.style.display = 'block';
           }
 	    	});
 	    }
@@ -112,7 +112,7 @@ p.customfont {
       <div id="gameContainer" style="width: 600px; height: 450px">
       </div>
       <div id="ShowLogIn">
-      	<div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="checkLoginState"></div>
+      	<div class="fb-login-button" data-width="" data-size="small" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="checkLoginState"></div>
       </div>
       <div class="footer">
       	<div class="slideshow-container">
