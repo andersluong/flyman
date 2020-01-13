@@ -19,6 +19,10 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
+    function newPlayer(){
+    	document.getElementById("ShowLogIn").style.display = 'block';
+	StartConnecting();
+    }
     function StartConnecting(){
 	    FB.init({appId: '1733001530153620', status: true, cookie: false, xbml: true});
         FB.getLoginStatus(function(response) {
@@ -111,7 +115,7 @@ p.customfont {
       </div>
 		<div id="ShowLogIn" align="center" style="text-align:center">
       <br>
-      	<div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="StartConnecting()"></div>
+      	<div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="newPlayer()"></div>
 		</div>
       <div class="footer">
       	<div class="slideshow-container">
