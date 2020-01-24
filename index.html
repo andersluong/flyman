@@ -89,10 +89,11 @@
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
             container.className = "unity-mobile";
             config.devicePixelRatio = 1;
-        } else {
-            canvas.style.width = "600px";
-            canvas.style.height = "450px";
         }
+        canvas.style.width = "600px";
+        canvas.style.height = "450px";
+        container.style.width = "600px";
+        container.style.height = "450px";
         loadingBar.style.display = "block";
 
         var script = document.createElement("script");
