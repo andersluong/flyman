@@ -3,15 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Unity WebGL Player | FlyMan</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <script type="text/javascript" src="https://connect.facebook.net/en_US/all.js"></script>
 </head>
 <body>
-    <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0&appId=1733001530153620&autoLogAppEvents=1"></script>
     <div id="unity-container" class="unity-desktop">
         <canvas id="unity-canvas"></canvas>
         <div id="unity-loading-bar">
@@ -25,10 +22,8 @@
           <div id="unity-fullscreen-button"></div>
           <div id="unity-build-title">FlyMan</div>
         </div>!-->
-        <div id="ShowLogIn" align="center" style="text-align:center">
-            <br>
-            <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false" data-onlogin="newPlayer()"></div>
-        </div>
+        <div id="gameid" align="center"></div>
+
         <div class="footer">
             <div class="slideshow-container">
 
@@ -52,177 +47,170 @@
 
             </div>
 
-            <div style="text-align:left">
+            <div style="        text-align: left">
                 <span class="dot"></span>
                 <span class="dot"></span>
                 <span class="dot"></span>
             </div>
         </div>
-
     </div>
-    <script>//Load the SDK
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+    <script>
 
-        var buildUrl = "Build";
-        var loaderUrl = buildUrl + "/FM.loader.js";
-        var config = {
-            dataUrl: buildUrl + "/FM.data",
-            frameworkUrl: buildUrl + "/FM.framework.js",
-            codeUrl: buildUrl + "/FM.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "FM",
-            productName: "FlyMan",
-            productVersion: "0.5",
-        };
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/FM.loader.js";
+    var config = {
+        dataUrl: buildUrl + "/FM.data.unityweb",
+        frameworkUrl: buildUrl + "/FM.framework.js.unityweb",
+        codeUrl: buildUrl + "/FM.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "FM",
+        productName: "FlyMan",
+        productVersion: "0.5",
+    };
 
-        var container = document.querySelector("#unity-container");
-        var canvas = document.querySelector("#unity-canvas");
-        var loadingBar = document.querySelector("#unity-loading-bar");
-        var progressBarFull = document.querySelector("#unity-progress-bar-full");
-        var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var container = document.querySelector("#unity-container");
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBarFull = document.querySelector("#unity-progress-bar-full");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
 
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            container.className = "unity-mobile";
-            config.devicePixelRatio = 1;
-        }
-        canvas.style.width = "760px";
-        canvas.style.height = "570px";
-        container.style.width = "760px";
-        container.style.height = "570px";
-        loadingBar.style.display = "block";
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        config.devicePixelRatio = 1;
+    }
+    canvas.style.width = "760px";
+    canvas.style.height = "570px";
+    container.style.width = "760px";
+    container.style.height = "570px";
+    loadingBar.style.display = "block";
 
-        var script = document.createElement("script");
-        script.src = loaderUrl;
-        var gameInstance;
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                progressBarFull.style.width = 100 * progress + "%";
-            }).then((unityInstance) => {
-                gameInstance = unityInstance;
-                loadingBar.style.display = "none";
-                /*fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };*/
-            }).catch((message) => {
-                alert(message);
-            });
-        };
-        document.body.appendChild(script);
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    var gameInstance;
+    script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+            gameInstance = unityInstance;
+            loadingBar.style.display = "none";
+            /*fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };*/
+        }).catch((message) => {
+            alert(message);
+        });
+    };
+    document.body.appendChild(script);
 
-        function newPlayer(){
-      document.getElementById("ShowLogIn").style.display = 'none';
-  StartConnecting();
+    var playerID = "";
+
+    function FetchedInformation(gameID){
+        playerID = gameID;
+        var welcomeBlock = document.getElementById('gameid');
+        welcomeBlock.innerHTML = "<font face='Times New Roman'>Your GameID = " + playerID + " <button onclick='copyID()'>Copy ID</button>";
     }
 
-        function StartConnecting() {
-            FB.init({ appId: '1733001530153620', status: true, cookie: false, xbml: true });
-            FB.getLoginStatus(function (response) {
-                if (response.status == 'connected') {
-                    OnLogin(response);
-                } else {
-                    document.getElementById("ShowLogIn").style.display='block';
-                }
-            });
-        }
+    function copyID(){
+        var textarea = document.createElement("textarea");
+        textarea.value = playerID;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        alert("Copied: " + textarea.value + " to clipboard!");
+        document.body.removeChild(textarea);
+    }
 
-        function checkLoginState() {
-            FB.getLoginStatus(function (response) {
-                onLogin(response);
-            });
-        }
+    function CopiedOtherID(otherID){
+        var copyarea = document.createElement("textarea");
+        copyarea.value = otherID;
+        document.body.appendChild(copyarea);
+        copyarea.select();
+        document.execCommand("copy");
+        alert("Copied: " + copyarea.value + " to clipboard!");
+        document.body.removeChild(copyarea);
+    }
 
+    var slideIndex = 0;
+    showSlides();
 
-        function OnLogin(response) {
-            FB.api('/me/', 'GET', { "fields": "name" }, function (data) {
-                console.log(response.authResponse.accessToken);
-                gameInstance.SendMessage("MainCodes", "LoadedFB", response.authResponse.accessToken + "|" + data.name);
-            });
+    function showSlides() {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
         }
-        var slideIndex = 0;
-        showSlides();
+        slideIndex++;
+        if (slideIndex > slides.length) { slideIndex = 1 }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        setTimeout(showSlides, 15000); // Change image every 15 seconds
+    }
+    </script>
 
-        function showSlides() {
-            var i;
-            var slides = document.getElementsByClassName("mySlides");
-            var dots = document.getElementsByClassName("dot");
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
-            setTimeout(showSlides, 15000); // Change image every 15 seconds
-        }
-        document.getElementById("ShowLogIn").style.display = 'none';</script>
     <style>
 
+    /* Slideshow container */
+    .slideshow-container {
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
+    }
 
-        /* Slideshow container */
-        .slideshow-container {
-            max-width: 1000px;
-            position: relative;
-            margin: auto;
+    /* The dots/bullets/indicators */
+    .dot {
+        height: 0px;
+        width: 0px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+    .active {
+        background-color: #717171;
+    }
+
+    /* Fading animation */
+    .fade {
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: 1.5s;
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+
+    @-webkit-keyframes fade {
+        from {
+            opacity: .4
         }
 
-        /* The dots/bullets/indicators */
-        .dot {
-            height: 0px;
-            width: 0px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
+        to {
+            opacity: 1
+        }
+    }
+
+    @keyframes fade {
+        from {
+            opacity: .4
         }
 
-        .active {
-            background-color: #717171;
+        to {
+            opacity: 1
         }
+    }
 
-        /* Fading animation */
-        .fade {
-            -webkit-animation-name: fade;
-            -webkit-animation-duration: 1.5s;
-            animation-name: fade;
-            animation-duration: 1.5s;
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+        .text {
+            font-size: 11px
         }
+    }
 
-        @-webkit-keyframes fade {
-            from {
-                opacity: .4
-            }
-
-            to {
-                opacity: 1
-            }
-        }
-
-        @keyframes fade {
-            from {
-                opacity: .4
-            }
-
-            to {
-                opacity: 1
-            }
-        }
-
-        /* On smaller screens, decrease text size */
-        @media only screen and (max-width: 300px) {
-            .text {
-                font-size: 11px
-            }
-        }
     </style>
 </body>
 </html>
+
