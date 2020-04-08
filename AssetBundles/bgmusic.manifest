@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3951743262
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4a0da230ff4bc012dbb2e94e13a945e1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+Assets:
+- Assets/Sounds/fm.mp3
+Dependencies: []
