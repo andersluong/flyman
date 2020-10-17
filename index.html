@@ -1,217 +1,70 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-us">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* https://* 'unsafe-inline'; script-src 'self' https://* 'unsafe-inline' 'unsafe-eval'" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FlyMan</title>
+    <title>Unity WebGL Player | FlyMan</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-</head>
-<body>
+  </head>
+  <body>
     <div id="unity-container" class="unity-desktop">
-        <canvas id="unity-canvas"></canvas>
-        <div id="unity-loading-bar">
-            <div id="unity-logo"></div>
-            <div id="unity-progress-bar-empty">
-                <div id="unity-progress-bar-full"></div>
-            </div>
+      <canvas id="unity-canvas"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
         </div>
-        <!--<div id="unity-footer">
-          <div id="unity-webgl-logo"></div>
-          <div id="unity-fullscreen-button"></div>
-          <div id="unity-build-title">FlyMan</div>
-        </div>!-->
-        <div id="gameid" align="center"></div>
-
-        <div class="footer">
-            <div class="slideshow-container">
-
-                <div class="mySlides fade">
-                    <div class="numbertext"></div>
-                    <a href="https://www.facebook.com/groups/flymangame/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height="127" weight="760"></a>
-                    <div class="text"></div>
-                </div>
-
-                <div class="mySlides fade">
-                    <div class="numbertext"></div>
-                    <a href="https://www.facebook.com/groups/flymanpage/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height="127" weight="760"></a>
-                    <div class="text"></div>
-                </div>
-
-                <div class="mySlides fade">
-                    <div class="numbertext"></div>
-                    <a href="https://www.facebook.com/groups/flymangame/permalink/2188118384619616/" target="_blank"><img src="https://i.imgur.com/BalDBya.png" height="127" weight="760"></a>
-                    <div class="text"></div>
-                </div>
-
-            </div>
-
-            <div style="        text-align: left">
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-        </div>
+      </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">FlyMan</div>
+      </div>
     </div>
     <script>
-
-    var buildUrl = "Build";
-    var loaderUrl = buildUrl + "/FM.loader.js";
-    var config = {
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/FM.loader.js";
+      var config = {
         dataUrl: buildUrl + "/FM.data.unityweb",
         frameworkUrl: buildUrl + "/FM.framework.js.unityweb",
         codeUrl: buildUrl + "/FM.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "FM",
+        companyName: "FlyManTeam",
         productName: "FlyMan",
-        productVersion: "0.5",
-    };
+        productVersion: "1.2.3",
+      };
 
-    var container = document.querySelector("#unity-container");
-    var canvas = document.querySelector("#unity-canvas");
-    var loadingBar = document.querySelector("#unity-loading-bar");
-    var progressBarFull = document.querySelector("#unity-progress-bar-full");
-    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
 
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         container.className = "unity-mobile";
         config.devicePixelRatio = 1;
-    }
-    canvas.style.width = "760px";
-    canvas.style.height = "570px";
-    container.style.width = "760px";
-    container.style.height = "570px";
-    loadingBar.style.display = "block";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+      loadingBar.style.display = "block";
 
-    var script = document.createElement("script");
-    script.src = loaderUrl;
-    var gameInstance;
-    script.onload = () => {
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-            progressBarFull.style.width = 100 * progress + "%";
+          progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
-            gameInstance = unityInstance;
-            loadingBar.style.display = "none";
-            /*fullscreenButton.onclick = () => {
-              unityInstance.SetFullscreen(1);
-            };*/
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
         }).catch((message) => {
-            alert(message);
+          alert(message);
         });
-    };
-    document.body.appendChild(script);
-
-    var playerID = "";
-
-    function FetchedInformation(gameID){
-        playerID = gameID;
-        var welcomeBlock = document.getElementById('gameid');
-        welcomeBlock.innerHTML = "<font face='Times New Roman'>Your GameID = " + playerID + " <button onclick='copyID()'>Copy ID</button>";
-    }
-
-    function copyID(){
-        var textarea = document.createElement("textarea");
-        textarea.value = playerID;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        alert("Copied: " + textarea.value + " to clipboard!");
-        document.body.removeChild(textarea);
-    }
-
-    function CopiedOtherID(otherID){
-        var copyarea = document.createElement("textarea");
-        copyarea.value = otherID;
-        document.body.appendChild(copyarea);
-        copyarea.select();
-        document.execCommand("copy");
-        alert("Copied: " + copyarea.value + " to clipboard!");
-        document.body.removeChild(copyarea);
-    }
-
-    var slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-        var i;
-        var slides = document.getElementsByClassName("mySlides");
-        var dots = document.getElementsByClassName("dot");
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) { slideIndex = 1 }
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex - 1].style.display = "block";
-        dots[slideIndex - 1].className += " active";
-        setTimeout(showSlides, 15000); // Change image every 15 seconds
-    }
+      };
+      document.body.appendChild(script);
     </script>
-
-    <style>
-
-    /* Slideshow container */
-    .slideshow-container {
-        max-width: 1000px;
-        position: relative;
-        margin: auto;
-    }
-
-    /* The dots/bullets/indicators */
-    .dot {
-        height: 0px;
-        width: 0px;
-        margin: 0 2px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-        transition: background-color 0.6s ease;
-    }
-
-    .active {
-        background-color: #717171;
-    }
-
-    /* Fading animation */
-    .fade {
-        -webkit-animation-name: fade;
-        -webkit-animation-duration: 1.5s;
-        animation-name: fade;
-        animation-duration: 1.5s;
-    }
-
-    @-webkit-keyframes fade {
-        from {
-            opacity: .4
-        }
-
-        to {
-            opacity: 1
-        }
-    }
-
-    @keyframes fade {
-        from {
-            opacity: .4
-        }
-
-        to {
-            opacity: 1
-        }
-    }
-
-    /* On smaller screens, decrease text size */
-    @media only screen and (max-width: 300px) {
-        .text {
-            font-size: 11px
-        }
-    }
-
-    </style>
-</body>
+  </body>
 </html>
-
